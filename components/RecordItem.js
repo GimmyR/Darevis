@@ -1,35 +1,55 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const RecordItem = function({ record }) {
+    const [pressed, setPressed] = useState(false);
+
+    const onPress = function() {
+        setPressed(true);
+        console.log(`RECORD n*${record.id} PRESSED !`);
+    };
+
     return (
-        <View style={styles.container}>
-            <View style={styles.titleView}>
-                <Text>{record.title}</Text>
+        <Pressable onPressIn={onPress} onPressOut={() => setPressed(false)}>
+            <View style={pressed ? [styles.container, styles.containerPressed] : styles.container}>
+                <View style={styles.titleView}>
+                    <Text style={styles.titleText}>{record.title}</Text>
+                </View>
+                <View style={styles.dateView}>
+                    <Text style={styles.dateText}>{record.creationDate}</Text>
+                </View>
             </View>
-            <View style={styles.dateView}>
-                <Text style={styles.dateText}>{record.creationDate}</Text>
-            </View>
-        </View>
+        </Pressable>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#ffffff",
-        marginVertical: 5,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 5
+        borderBottomWidth: 1,
+        borderColor: "#c5c5c5",
+        flex: 1,
+        flexDirection: "row",
+        paddingVertical: 17
+    },
+
+    containerPressed: {
+        backgroundColor: "#dfdfdf"
     },
 
     titleView: {
-        borderBottomWidth: 1,
-        borderBottomColor: "gray",
-        paddingTop: 7
+        flex: 3,
+        paddingHorizontal: 18
+    },
+
+    titleText: {
+        fontWeight: "bold",
+        fontSize: 15
     },
 
     dateView: {
-        paddingVertical: 10
+        flex: 1,
+        alignItems: "flex-end",
+        paddingHorizontal: 18
     },
 
     dateText: {

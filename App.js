@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 const App = function() {
     return (
         <NavigationContainer>
-            <StatusBar animated={true} hidden={false} backgroundColor='#ffffff'/>
+            <StatusBar animated={true} hidden={false}/>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='Home' component={Home}/>
             </Stack.Navigator>

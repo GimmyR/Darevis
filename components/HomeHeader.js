@@ -17,11 +17,12 @@ const HomeHeader = function() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#ffffff",
         flexDirection: "row",
         paddingStart: 15,
         paddingEnd: 8,
-        paddingVertical: 5
+        paddingVertical: 5,
+        borderBottomWidth: 1,
+        borderColor: "#dddddd"
     },
 
     titleView: {
