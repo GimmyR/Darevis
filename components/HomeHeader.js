@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "./IconButton";
 
-const HomeHeader = function() {
+const HomeHeader = function({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.titleView}>
                 <Text style={styles.title}>Darevis</Text>
             </View>
             <View style={styles.buttonsView}>
-                <IconButton name={ "plus-circle" } iconStyle={styles.circleIcon}/>
+                <IconButton onPress={() => navigation.navigate("new record")} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
                 <IconButton name={ "question-circle" } iconStyle={styles.circleIcon}/>
             </View>
         </View>

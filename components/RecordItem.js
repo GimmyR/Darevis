@@ -6,17 +6,16 @@ const RecordItem = function({ record }) {
 
     const onPress = function() {
         setPressed(true);
-        console.log(`RECORD n*${record.id} PRESSED !`);
     };
 
     return (
         <Pressable onPressIn={onPress} onPressOut={() => setPressed(false)}>
             <View style={pressed ? [styles.container, styles.containerPressed] : styles.container}>
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>{record.title}</Text>
+                    <Text style={styles.titleText}>{record["title"]}</Text>
                 </View>
                 <View style={styles.dateView}>
-                    <Text style={styles.dateText}>{record.creationDate}</Text>
+                    <Text style={styles.dateText}>{record["creation_date"]}</Text>
                 </View>
             </View>
         </Pressable>
