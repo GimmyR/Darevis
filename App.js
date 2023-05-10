@@ -7,6 +7,7 @@ import { schema } from './migrations/schema';
 import { useEffect } from 'react';
 import NewRecord from './screens/NewRecord';
 import Record from './screens/Record';
+import NewEntry from './screens/NewEntry';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const App = function() {
                 <Stack.Screen name='home' component={Home}/>
                 <Stack.Screen name='new record' component={NewRecord}/>
                 <Stack.Screen name='record' component={Record}/>
+                <Stack.Screen name='new entry' component={NewEntry}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
