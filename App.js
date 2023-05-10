@@ -6,13 +6,14 @@ import * as SQLite from 'expo-sqlite';
 import { schema } from './migrations/schema';
 import { useEffect } from 'react';
 import NewRecord from './screens/NewRecord';
+import Record from './screens/Record';
 
 const Stack = createNativeStackNavigator();
 
 const App = function() {
     const db = SQLite.openDatabase("darevis");
 
-    useEffect(() => {
+    const createIfNotExists = function() {
         schema.forEach((query) => {
             db.transaction(tx => {
                 tx.executeSql(
@@ -21,6 +22,18 @@ const App = function() {
                 );
             });
         });
+    };
+
+    const clearDB = function() {
+        db.transaction(tx => {
+            tx.executeSql("DELETE FROM Parameter");
+            tx.executeSql("DELETE FROM Record");
+        });
+    };
+
+    useEffect(() => {
+        createIfNotExists();
+        //clearDB();
     }, []);
 
     return (
@@ -29,6 +42,7 @@ const App = function() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='home' component={Home}/>
                 <Stack.Screen name='new record' component={NewRecord}/>
+                <Stack.Screen name='record' component={Record}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

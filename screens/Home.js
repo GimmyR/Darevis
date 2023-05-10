@@ -7,24 +7,33 @@ import RecordNotFound from "../components/RecordNotFound";
 
 const Home = function({ navigation }) {
     const db = SQLite.openDatabase("darevis");
+    
     const [records, setRecords] = useState([]);
 
-    useEffect(() => {
+    const selectRecords = function() {
         db.transaction(tx => {
             tx.executeSql(
                 "SELECT * FROM Record", null,
-                (txObj, resultSet) => setRecords(resultSet.rows._array),
+                (txObj, resultSet) => setRecords(resultSet.rows._array), 
                 (txObj, error) => console.log(error)
             );
         });
-    }, []);
+    };
+
+    const navigateTo = function(record) {
+        navigation.navigate("record", { record: record });
+    };
+
+    useEffect(() => selectRecords());
 
     return (
         <View style={styles.container}>
             <HomeHeader navigation={navigation}/>
             <ScrollView>
                 {records.length == 0 && <RecordNotFound/>}
-                {records.map(record => <RecordItem key={record["id"]} record={record}/>)}
+                {records.map(
+                    record => <RecordItem onPress={() => navigateTo(record)} key={record["id"]} record={record}/>
+                )}
             </ScrollView>
         </View>
     );

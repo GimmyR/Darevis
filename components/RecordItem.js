@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const RecordItem = function({ record }) {
+const RecordItem = function({ onPress, record }) {
     const [pressed, setPressed] = useState(false);
 
-    const onPress = function() {
-        setPressed(true);
-    };
-
     return (
-        <Pressable onPressIn={onPress} onPressOut={() => setPressed(false)}>
+        <Pressable onPress={onPress} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)}>
             <View style={pressed ? [styles.container, styles.containerPressed] : styles.container}>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>{record["title"]}</Text>

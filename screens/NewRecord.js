@@ -1,10 +1,13 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import NewRecordHeader from "../components/NewRecordHeader";
 import StdButton from "../components/StdButton";
 import { useState } from "react";
 import NewParameter from "../components/NewParameter";
+import * as SQLite from "expo-sqlite";
 
 const NewRecord = function({ navigation }) {
+    const db = SQLite.openDatabase("darevis");
+
     const [title, setTitle] = useState(null);
 
     const [parameters, setParameters] = useState([]);
@@ -32,14 +35,43 @@ const NewRecord = function({ navigation }) {
     };
 
     const onPressCR = function() {
+        Alert.alert("Confirmation", "Are you sure you want to continue ?", [
+            { text: "No" },
+            { text: "Yes", onPress: () => onPressAlert() }
+        ]);
+    };
+
+    const onPressAlert = function() {
         let record = { title: title, creation_date: new Date().toLocaleDateString() };
         
-        console.log("---------------------");
+        /*console.log("---------------------");
         console.log("RECORD:");
         console.log(record);
         console.log("PARAMETERS:");
         console.log(parameters);
-        console.log("---------------------");
+        console.log("---------------------");*/
+
+        createRecord(record);
+    };
+
+    const createRecord = function(record) {
+        db.transaction(tx => {
+            tx.executeSql(
+                "INSERT INTO Record (creation_date, title) VALUES (?, ?)",
+                [ record.creation_date, record.title ],
+                (txObj, resultSet) => {
+
+                    parameters.forEach(p => {
+                        tx.executeSql(
+                            "INSERT INTO Parameter (record_id, title, min, max, unit) VALUES (?, ?, ?, ?, ?)",
+                            [ resultSet.insertId, p.title, p.min, p.max, p.unit ], null, 
+                            (txObj2, error) => console.log(error)
+                        );
+                    }); navigation.navigate("home");
+                    
+                }, (txObj, error) => console.log(error)
+            );
+        });
     };
 
     return (
