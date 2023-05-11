@@ -27,8 +27,10 @@ const App = function() {
 
     const clearDB = function() {
         db.transaction(tx => {
-            tx.executeSql("DELETE FROM Parameter");
-            tx.executeSql("DELETE FROM Record");
+            tx.executeSql("DELETE FROM Entry_Detail");
+            tx.executeSql("DELETE FROM Entry_Data");
+            //tx.executeSql("DELETE FROM Parameter");
+            //tx.executeSql("DELETE FROM Record");
         });
     };
 

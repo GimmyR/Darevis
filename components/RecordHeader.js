@@ -5,13 +5,13 @@ const RecordHeader = function({ record, navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.buttonsViewLeft}>
-                <IconButton onPress={() => navigation.navigate("home")} name={ "arrow-left" } iconStyle={styles.icon}/>
+                <IconButton onPress={() => navigation.push("home")} name={ "arrow-left" } iconStyle={styles.icon}/>
             </View>
             <View style={styles.titleView}>
                 <Text style={styles.title}>{record.title}</Text>
             </View>
             <View style={styles.buttonsViewRight}>
-                <IconButton onPress={() => navigation.navigate("new entry", { record: record })} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
+                <IconButton onPress={() => navigation.push("new entry", { record: record })} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
                 <IconButton name={ "cog" } iconStyle={styles.circleIcon}/>
             </View>
         </View>

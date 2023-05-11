@@ -21,10 +21,10 @@ const Home = function({ navigation }) {
     };
 
     const navigateTo = function(record) {
-        navigation.navigate("record", { record: record });
+        navigation.push("record", { record: record });
     };
 
-    useEffect(() => selectRecords());
+    useEffect(() => selectRecords(), []);
 
     return (
         <View style={styles.container}>

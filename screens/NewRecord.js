@@ -67,7 +67,7 @@ const NewRecord = function({ navigation }) {
                             [ resultSet.insertId, p.title, p.min, p.max, p.unit ], null, 
                             (txObj2, error) => console.log(error)
                         );
-                    }); navigation.navigate("home");
+                    }); navigation.push("home");
                     
                 }, (txObj, error) => console.log(error)
             );

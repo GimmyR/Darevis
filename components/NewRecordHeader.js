@@ -5,7 +5,7 @@ const NewRecordHeader = function({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.buttonView}>
-                <IconButton onPress={() => navigation.navigate("home")} name={ "arrow-left" } iconStyle={styles.icon}/>
+                <IconButton onPress={() => navigation.push("home")} name={ "arrow-left" } iconStyle={styles.icon}/>
             </View>
             <View style={styles.titleView}>
                 <Text style={styles.title}>New Record</Text>
