@@ -12,7 +12,7 @@ const RecordHeader = function({ record, navigation }) {
             </View>
             <View style={styles.buttonsViewRight}>
                 <IconButton onPress={() => navigation.push("new entry", { record: record })} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
-                <IconButton name={ "cog" } iconStyle={styles.circleIcon}/>
+                <IconButton onPress={() => navigation.push("edit record", { record: record })} name={ "cog" } iconStyle={styles.circleIcon}/>
             </View>
         </View>
     );
