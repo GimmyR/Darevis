@@ -26,22 +26,30 @@ const NewParameter = function({ index, parameters, setParameters, removeParam })
         setParameters(params);
     };
 
+    const castToString = function(item) {
+        if(item == null)
+            return "";
+        else return item + "";
+    };
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Name</Text>
-            <TextInput defaultValue={parameters[index].title} onChangeText={newTitle => setTitle(newTitle)} style={styles.textInput} inputMode="text"/>
+        (parameters[index].comment == undefined || parameters[index].comment != "remove") ?
+            <View style={styles.container}>
+                <Text style={styles.text}>Name</Text>
+                <TextInput defaultValue={parameters[index].title} onChangeText={newTitle => setTitle(newTitle)} style={styles.textInput} inputMode="text"/>
 
-            <Text style={styles.text}>Minimum</Text>
-            <TextInput defaultValue={parameters[index].min} onChangeText={newMin => setMin(newMin)} style={styles.textInput} inputMode="numeric"/>
+                <Text style={styles.text}>Minimum</Text>
+                <TextInput defaultValue={castToString(parameters[index].min)} onChangeText={newMin => setMin(newMin)} style={styles.textInput} inputMode="numeric"/>
 
-            <Text style={styles.text}>Maximum</Text>
-            <TextInput defaultValue={parameters[index].max} onChangeText={newMax => setMax(newMax)} style={styles.textInput} inputMode="numeric"/>
+                <Text style={styles.text}>Maximum</Text>
+                <TextInput defaultValue={castToString(parameters[index].max)} onChangeText={newMax => setMax(newMax)} style={styles.textInput} inputMode="numeric"/>
 
-            <Text style={styles.text}>Unit</Text>
-            <TextInput defaultValue={parameters[index].unit} onChangeText={newUnit => setUnit(newUnit)} style={styles.textInput} inputMode="text"/>
+                <Text style={styles.text}>Unit</Text>
+                <TextInput defaultValue={parameters[index].unit} onChangeText={newUnit => setUnit(newUnit)} style={styles.textInput} inputMode="text"/>
 
-            <StdButton onPress={() => removeParam(index)} btnStyle={styles.rpBtnStyle} txtStyle={styles.rpTxtStyle} underlayColor={"#bc0003"}>Remove Parameter</StdButton>
-        </View>
+                <StdButton onPress={() => removeParam(index)} btnStyle={styles.rpBtnStyle} txtStyle={styles.rpTxtStyle} underlayColor={"#bc0003"}>Remove Parameter</StdButton>
+            </View>
+        : null
     );
 };
 
