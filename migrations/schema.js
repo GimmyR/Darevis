@@ -13,14 +13,14 @@ export const schema = [
         min         REAL,
         max         REAL,
         unit        TEXT,
-        FOREIGN KEY (record_id) REFERENCES Record(id)
+        FOREIGN KEY (record_id) REFERENCES Record(id) ON DELETE CASCADE
     );`,
 
     `CREATE TABLE IF NOT EXISTS Entry_Data (
         id              INTEGER PRIMARY KEY,
         record_id       INTEGER NOT NULL,
         addition_date   TEXT NOT NULL,
-        FOREIGN KEY (record_id) REFERENCES Record(id)
+        FOREIGN KEY (record_id) REFERENCES Record(id) ON DELETE CASCADE
     );`,
 
     `CREATE TABLE IF NOT EXISTS Entry_Detail (
@@ -28,8 +28,8 @@ export const schema = [
         entry_id        INTEGER NOT NULL,
         parameter_id    INTEGER NOT NULL,
         data_value      REAL NOT NULL,
-        FOREIGN KEY (entry_id) REFERENCES Entry_Data(id),
-        FOREIGN KEY (parameter_id) REFERENCES Parameter(id)
+        FOREIGN KEY (entry_id) REFERENCES Entry_Data(id) ON DELETE CASCADE,
+        FOREIGN KEY (parameter_id) REFERENCES Parameter(id) ON DELETE CASCADE
     );`
 
 ];
