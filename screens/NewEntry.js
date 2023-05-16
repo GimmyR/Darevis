@@ -14,6 +14,8 @@ const NewEntry = function({ navigation, route }) {
 
     const [values, setValues] = useState([]);
 
+    const [isValid, setIsValid] = useState(true);
+
     const initValues = function(length) {
         let val = [];
         for(var i = 0; i < length; i++)
@@ -34,10 +36,12 @@ const NewEntry = function({ navigation, route }) {
     };
 
     const onPressSaveEntry = function() {
-        Alert.alert("Confirmation", "Are you sure you want to continue ?", [
-            { text: "No" },
-            { text: "Yes", onPress: () => onPressYes() }
-        ]);
+        if(isValid) {
+            Alert.alert("Confirmation", "Are you sure you want to continue ?", [
+                { text: "No" },
+                { text: "Yes", onPress: () => onPressYes() }
+            ]);
+        } else Alert.alert("Caution", "A data is invalid.", [{ text: "Ok" }]);
     };
 
     const onPressYes = function() {
@@ -73,7 +77,7 @@ const NewEntry = function({ navigation, route }) {
         <View style={styles.container}>
             <NewEntryHeader record={record} navigation={navigation}/>
             <ScrollView style={styles.scrollView}>
-                {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues}/>)}
+                {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
             </ScrollView>
             <View style={styles.btnView}>
                 <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
