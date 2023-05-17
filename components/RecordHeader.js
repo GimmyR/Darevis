@@ -11,7 +11,7 @@ const RecordHeader = function({ record, navigation }) {
                 <Text style={styles.title}>{record.title}</Text>
             </View>
             <View style={styles.buttonsViewRight}>
-                <IconButton onPress={() => navigation.push("new entry", { record: record })} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
+                <IconButton onPress={() => navigation.push("new entry", { record: record.id })} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
                 <IconButton onPress={() => navigation.push("edit record", { record: record.id })} name={ "cog" } iconStyle={styles.circleIcon}/>
             </View>
         </View>

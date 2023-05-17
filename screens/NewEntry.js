@@ -9,7 +9,7 @@ import { arrayToObject } from "../utils/helpers";
 const NewEntry = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
 
-    const [record, setRecord] = useState(route.params.record);
+    const [record, setRecord] = useState(null);
 
     const [parameters, setParameters] = useState([]);
 
@@ -24,16 +24,26 @@ const NewEntry = function({ navigation, route }) {
         setValues(val);
     };
 
-    const selectParameters = function() {
+    const selectParameters = function(recordId) {
         db.transaction(tx => {
             tx.executeSql(
-                "SELECT * FROM Parameter WHERE record_id = ?", [ record.id ],
+                "SELECT * FROM Parameter WHERE record_id = ?", [ recordId ],
                 (txObj, resultSet) => {
                     initValues(resultSet.rows._array.length);
                     setParameters(arrayToObject(resultSet.rows._array));
                 }, (txObj, error) => console.log(error)
             );
         });
+    };
+
+    const selectRecord = function() {
+        db.transaction(tx => tx.executeSql(
+            "SELECT * FROM Record WHERE id = ?", [ route.params.record ],
+            (txObj, resultSet) => {
+                selectParameters(resultSet.rows._array[0]["id"]);
+                setRecord(arrayToObject(resultSet.rows._array[0]));
+            }, (txObj, error) => console.log(error)
+        ));
     };
 
     const onPressSaveEntry = function() {
@@ -72,19 +82,21 @@ const NewEntry = function({ navigation, route }) {
         )); navigation.push("record", { record: record.id });
     };
 
-    useEffect(() => selectParameters(), []);
+    useEffect(() => selectRecord(), []);
 
-    return (
-        <View style={styles.container}>
-            <NewEntryHeader record={record} navigation={navigation}/>
-            <ScrollView style={styles.scrollView}>
-                {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
-            </ScrollView>
-            <View style={styles.btnView}>
-                <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
+    if(record != null) {
+        return (
+            <View style={styles.container}>
+                <NewEntryHeader record={record} navigation={navigation}/>
+                <ScrollView style={styles.scrollView}>
+                    {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
+                </ScrollView>
+                <View style={styles.btnView}>
+                    <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
+                </View>
             </View>
-        </View>
-    );
+        );
+    } else return null;
 }
 
 const styles = StyleSheet.create({
