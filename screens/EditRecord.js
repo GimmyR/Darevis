@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import NewParameter from "../components/NewParameter";
 import * as SQLite from "expo-sqlite";
 import DateInput from "../components/DateInput";
-import { addZeroBefore } from "../utils/helpers";
+import { addZeroBefore, arrayToObject } from "../utils/helpers";
 
 const EditRecord = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
@@ -93,7 +93,7 @@ const EditRecord = function({ navigation, route }) {
             "SELECT * FROM Record WHERE id = ?",
             [ route.params.record.id ],
             (txObj, resultSet) => {
-                setRecord(JSON.parse(JSON.stringify(resultSet.rows._array[0])));
+                setRecord(arrayToObject(resultSet.rows._array[0]));
                 selectParameters(resultSet.rows._array[0]["id"]);
             }, (txObj, error) => console.log(error)
         ));
@@ -102,7 +102,7 @@ const EditRecord = function({ navigation, route }) {
     const selectParameters = function(id) {
         db.transaction(tx => tx.executeSql(
             "SELECT * FROM Parameter WHERE record_id = ?", [ id ],
-            (txObj, resultSet) => setParameters(JSON.parse(JSON.stringify(resultSet.rows._array))),
+            (txObj, resultSet) => setParameters(arrayToObject(resultSet.rows._array)),
             (txObj, error) => console.log(error)
         ));
     };

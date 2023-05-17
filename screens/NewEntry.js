@@ -4,6 +4,7 @@ import StdButton from "../components/StdButton";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import Parameter from "../components/Parameter";
+import { arrayToObject } from "../utils/helpers";
 
 const NewEntry = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
@@ -29,7 +30,7 @@ const NewEntry = function({ navigation, route }) {
                 "SELECT * FROM Parameter WHERE record_id = ?", [ record.id ],
                 (txObj, resultSet) => {
                     initValues(resultSet.rows._array.length);
-                    setParameters(JSON.parse(JSON.stringify(resultSet.rows._array)));
+                    setParameters(arrayToObject(resultSet.rows._array));
                 }, (txObj, error) => console.log(error)
             );
         });
