@@ -12,26 +12,14 @@ const NewRecord = function({ navigation }) {
 
     const [parameters, setParameters] = useState([]);
 
-    const [parametersView, setParametersView] = useState(null);
-
-    const refreshParametersView = function() {
-        setParametersView(parameters.map(
-            (parameter, index) => <NewParameter key={index} index={index} parameters={parameters} setParameters={setParameters} removeParam={removeParam}/>
-        ));
-    };
-
     const removeParam = function(index) {
-        let params = parameters;
-        params.splice(index, 1);
-        setParameters(params);
-        refreshParametersView();
+        parameters.splice(index, 1);
+        setParameters([...parameters]);
     };
 
     const onPressNP = function() {
-        let params = parameters;
-        params.push({ title: null, min: null, max: null, unit: null });
-        setParameters(params);
-        refreshParametersView();
+        parameters.push({ title: null, min: null, max: null, unit: null });
+        setParameters([...parameters]);
     };
 
     const onPressCR = function() {
@@ -83,7 +71,7 @@ const NewRecord = function({ navigation }) {
                     <TextInput defaultValue={title} onChangeText={newTitle => setTitle(newTitle)} style={styles.titleTextInput}/>
                 </View>
                 <View style={styles.parametersView}>
-                    {parametersView}
+                    {parameters.map((parameter, index) => <NewParameter key={index} index={index} parameters={parameters} setParameters={setParameters} removeParam={removeParam}/>)}
                     <StdButton onPress={onPressNP} btnStyle={styles.npBtnStyle} txtStyle={styles.npTxtStyle} underlayColor={"#4062a7"}>New Parameter</StdButton>
                 </View>
             </ScrollView>
