@@ -69,7 +69,7 @@ const NewEntry = function({ navigation, route }) {
             "INSERT INTO Entry_Detail (entry_id, parameter_id, data_value) VALUES(?, ?, ?)",
             [ entry_id, v.parameter_id, v.data_value ], null,
             (txObj, error) => console.log(error)
-        )); navigation.push("record", { record: record });
+        )); navigation.push("record", { record: record.id });
     };
 
     useEffect(() => selectParameters(), []);

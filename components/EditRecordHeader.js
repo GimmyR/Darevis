@@ -23,7 +23,7 @@ const EditRecordHeader = function({ record, navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.buttonView}>
-                <IconButton onPress={() => navigation.push("record", { record: record })} name={ "arrow-left" } iconStyle={styles.icon}/>
+                <IconButton onPress={() => navigation.push("record", { record: record.id })} name={ "arrow-left" } iconStyle={styles.icon}/>
             </View>
             <View style={styles.titleView}>
                 <Text style={styles.title}>Edit Record</Text>

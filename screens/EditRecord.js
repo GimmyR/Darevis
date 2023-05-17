@@ -83,7 +83,7 @@ const EditRecord = function({ navigation, route }) {
             [ record.creation_date, record.title, record.id ],
             (txObj, resultSet) => {
                 updateParameters(tx, record.id);
-                navigation.push("record", { record: record });
+                navigation.push("record", { record: record.id });
             }, (txObj, error) => console.log(error)
         ));
     };

@@ -21,7 +21,7 @@ const Home = function({ navigation }) {
     };
 
     const navigateTo = function(record) {
-        navigation.push("record", { record: record });
+        navigation.push("record", { record: record.id });
     };
 
     useEffect(() => selectRecords(), []);

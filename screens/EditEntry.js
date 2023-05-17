@@ -96,7 +96,7 @@ const EditEntry = function({ navigation, route }) {
                         [ v.entry_id, v.parameter_id, v.data_value ],
                         (txObj3, resultSet3) => null,
                         (txObj3, error) => console.log(error)
-                    )); navigation.push("record", { record: record })
+                    )); navigation.push("record", { record: record.id })
                 }, (txObj2, error) => console.log(error)
             ), (txObj, error) => console.log(error)
         ));

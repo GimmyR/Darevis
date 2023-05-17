@@ -22,7 +22,7 @@ const EditEntryHeader = function({ entry, navigation }) {
     const removeEntry = function() {
         db.transaction(tx => tx.executeSql(
             "DELETE FROM Entry_Data WHERE id = ?", [ entry.id ],
-            (txObj, resultSet) => navigation.push("record", { record: record }),
+            (txObj, resultSet) => navigation.push("record", { record: record.id }),
             (txObj, error) => console.log(error)
         ));
     };
@@ -39,7 +39,7 @@ const EditEntryHeader = function({ entry, navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.buttonView}>
-                <IconButton onPress={() => navigation.push("record", { record: record })} name={ "arrow-left" } iconStyle={styles.icon}/>
+                <IconButton onPress={() => navigation.push("record", { record: record.id })} name={ "arrow-left" } iconStyle={styles.icon}/>
             </View>
             <View style={styles.titleView}>
                 <Text style={styles.title}>Edit Entry</Text>
