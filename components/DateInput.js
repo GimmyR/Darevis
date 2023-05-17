@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 const DateInput = function({ date, setDate, setIsValid }) {
-    const tabDate = date.split("/");
+    const dmy = date.split("/");
 
     const setDay = function(day) {
         var nb = parseInt(day);
@@ -30,15 +30,15 @@ const DateInput = function({ date, setDate, setIsValid }) {
     return (
         <View style={styles.container}>
             <View style={styles.dayView}>
-                <TextInput defaultValue={parseInt(tabDate[0]) + ""} onChangeText={day => setDay(day)} style={styles.dayInput} inputMode="numeric"/>
+                <TextInput defaultValue={parseInt(dmy[0]) + ""} onChangeText={day => setDay(day)} style={styles.dayInput} inputMode="numeric"/>
                 <Text style={styles.descText}>day</Text>
             </View>
             <View style={styles.monthView}>
-                <TextInput defaultValue={parseInt(tabDate[1]) + ""} onChangeText={month => setMonth(month)} style={styles.monthInput} inputMode="numeric"/>
+                <TextInput defaultValue={parseInt(dmy[1]) + ""} onChangeText={month => setMonth(month)} style={styles.monthInput} inputMode="numeric"/>
                 <Text style={styles.descText}>month</Text>
             </View>
             <View style={styles.yearView}>
-                <TextInput defaultValue={parseInt(tabDate[2]) + ""} onChangeText={year => setYear(year)} style={styles.yearInput} inputMode="numeric"/>
+                <TextInput defaultValue={parseInt(dmy[2]) + ""} onChangeText={year => setYear(year)} style={styles.yearInput} inputMode="numeric"/>
                 <Text style={styles.descText}>year</Text>
             </View>
         </View>
