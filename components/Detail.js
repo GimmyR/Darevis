@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import * as SQLite from "expo-sqlite";
-import { arrayToObject } from "../utils/helpers";
+import { arrayToObject, castToString } from "../utils/helpers";
 
 const Detail = function({ parameter, entry, index, setValue, setIsValid }) {
     const db = SQLite.openDatabase("darevis");
@@ -34,12 +34,6 @@ const Detail = function({ parameter, entry, index, setValue, setIsValid }) {
                 }
             }, (txObj, error) => console.log(error)
         ));
-    };
-
-    const castToString = function(item) {
-        if(item == null)
-            return "";
-        else return item + "";
     };
 
     useEffect(() => selectDetail(), []);

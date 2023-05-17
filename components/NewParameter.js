@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import StdButton from "./StdButton";
+import { castToString } from "../utils/helpers";
 
 const NewParameter = function({ index, parameters, setParameters, removeParam }) {
     const setTitle = function(title) {
@@ -24,12 +25,6 @@ const NewParameter = function({ index, parameters, setParameters, removeParam })
         let params = parameters;
         params[index].unit = unit;
         setParameters(params);
-    };
-
-    const castToString = function(item) {
-        if(item == null)
-            return "";
-        else return item + "";
     };
 
     return (

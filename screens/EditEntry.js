@@ -3,7 +3,7 @@ import EditEntryHeader from "../components/EditEntryHeader";
 import { useEffect, useState } from "react";
 import StdButton from "../components/StdButton";
 import * as SQLite from "expo-sqlite";
-import { arrayToObject } from "../utils/helpers";
+import { addZeroBefore, arrayToObject } from "../utils/helpers";
 import Detail from "../components/Detail";
 import DateInput from "../components/DateInput";
 import TimeInput from "../components/TimeInput";
@@ -26,12 +26,6 @@ const EditEntry = function({ navigation, route }) {
     const [isValid, setIsValid] = useState(true);
 
     const [datetimeValid, setDatetimeValid] = useState(true);
-
-    const addZeroBefore = function(str) {
-        while(str.length < 2)
-            str = "0" + str;
-        return str;
-    };
 
     const modifyDate = function(index, value) {
         let dmy = date.split("/");

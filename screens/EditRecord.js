@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NewParameter from "../components/NewParameter";
 import * as SQLite from "expo-sqlite";
 import DateInput from "../components/DateInput";
+import { addZeroBefore } from "../utils/helpers";
 
 const EditRecord = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
@@ -17,12 +18,6 @@ const EditRecord = function({ navigation, route }) {
         let rec = record;
         rec.title = newTitle;
         setRecord(rec);
-    };
-
-    const addZeroBefore = function(str) {
-        while(str.length < 2)
-            str = "0" + str;
-        return str;
     };
 
     const modifyDate = function(index, value) {
