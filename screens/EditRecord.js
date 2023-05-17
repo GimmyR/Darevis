@@ -90,8 +90,7 @@ const EditRecord = function({ navigation, route }) {
 
     const selectRecord = function() {
         db.transaction(tx => tx.executeSql(
-            "SELECT * FROM Record WHERE id = ?",
-            [ route.params.record.id ],
+            "SELECT * FROM Record WHERE id = ?", [ route.params.record ],
             (txObj, resultSet) => {
                 setRecord(arrayToObject(resultSet.rows._array[0]));
                 selectParameters(resultSet.rows._array[0]["id"]);
