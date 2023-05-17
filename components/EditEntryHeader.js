@@ -2,7 +2,7 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import IconButton from "./IconButton";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import arrayToObject from "../utils/functions";
+import { arrayToObject } from "../utils/helpers";
 
 const EditEntryHeader = function({ entry, navigation }) {
     const db = SQLite.openDatabase("darevis");

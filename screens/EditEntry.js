@@ -3,7 +3,7 @@ import EditEntryHeader from "../components/EditEntryHeader";
 import { useEffect, useState } from "react";
 import StdButton from "../components/StdButton";
 import * as SQLite from "expo-sqlite";
-import arrayToObject from "../utils/functions";
+import { arrayToObject } from "../utils/helpers";
 import Detail from "../components/Detail";
 import DateInput from "../components/DateInput";
 import TimeInput from "../components/TimeInput";

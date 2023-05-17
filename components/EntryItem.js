@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LogBox, StyleSheet, Text, View } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { Row, Rows, Table } from "react-native-table-component";
-import arrayToObject from "../utils/functions";
+import { arrayToObject } from "../utils/helpers";
 import IconButton from "./IconButton";
 
 const EntryItem = function({ entry, navigation }) {

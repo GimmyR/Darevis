@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import * as SQLite from "expo-sqlite";
-import arrayToObject from "../utils/functions";
+import { arrayToObject } from "../utils/helpers";
 
 const Detail = function({ parameter, entry, index, setValue, setIsValid }) {
     const db = SQLite.openDatabase("darevis");
