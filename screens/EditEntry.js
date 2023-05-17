@@ -11,13 +11,13 @@ import TimeInput from "../components/TimeInput";
 const EditEntry = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
 
-    const [entry, setEntry] = useState(route.params.entry);
+    const [entry, setEntry] = useState(null);
 
     const [record, setRecord] = useState(null);
 
-    const datetime = entry.addition_date.split(" ");
-    const [date, setDate] = useState(datetime[0]);
-    const [time, setTime] = useState(datetime[1]);
+    const [date, setDate] = useState(null);
+
+    const [time, setTime] = useState(null);
 
     const [parameters, setParameters] = useState([]);
 
@@ -45,9 +45,9 @@ const EditEntry = function({ navigation, route }) {
         setTime(hms[0] + ":" + hms[1] + ":" + hms[2]);
     };
 
-    const initValues = function(table) {
+    const initValues = function(table, entryId) {
         values.splice(0, values.length);
-        table.forEach(row => values.push({ entry_id: entry.id, parameter_id: row.id, data_value: null }));
+        table.forEach(row => values.push({ entry_id: entryId, parameter_id: row.id, data_value: null }));
         setValues([...values]);
     };
 
@@ -56,19 +56,32 @@ const EditEntry = function({ navigation, route }) {
         setValues([...values]);
     };
 
-    const selectParameters = function() {
+    const selectEntry = function() {
         db.transaction(tx => tx.executeSql(
-            "SELECT * FROM Parameter WHERE record_id = ?", [ entry.record_id ],
+            "SELECT * FROM Entry_Data WHERE id = ?", [ route.params.entry ],
             (txObj, resultSet) => {
-                initValues(arrayToObject(resultSet.rows._array));
+                setDate(resultSet.rows._array[0]["addition_date"].split(" ")[0]);
+                setTime(resultSet.rows._array[0]["addition_date"].split(" ")[1]);
+                setEntry(arrayToObject(resultSet.rows._array[0]));
+                selectParameters(resultSet.rows._array[0]["record_id"], resultSet.rows._array[0]["id"]);
+                selectRecord(resultSet.rows._array[0]["record_id"]);
+            }, (txObj, error) => console.log(error)
+        ));
+    };
+
+    const selectParameters = function(recordId, entryId) {
+        db.transaction(tx => tx.executeSql(
+            "SELECT * FROM Parameter WHERE record_id = ?", [ recordId ],
+            (txObj, resultSet) => {
+                initValues(arrayToObject(resultSet.rows._array, entryId));
                 setParameters(arrayToObject(resultSet.rows._array));
             }, (txObj, error) => console.log(error)
         ));
     };
 
-    const selectRecord = function() {
+    const selectRecord = function(recordId) {
         db.transaction(tx => tx.executeSql(
-            "SELECT * FROM Record WHERE id = ?", [ entry.record_id ],
+            "SELECT * FROM Record WHERE id = ?", [ recordId ],
             (txObj, resultSet) => {
                 if(resultSet.rows._array.length == 1)
                     setRecord(arrayToObject(resultSet.rows._array[0]));
@@ -102,32 +115,31 @@ const EditEntry = function({ navigation, route }) {
         ));
     };
 
-    useEffect(() => {
-        selectParameters();
-        selectRecord();
-    }, []);
+    useEffect(() => selectEntry(), []);
 
-    return (
-        <View style={styles.container}>
-            <EditEntryHeader entry={entry} navigation={navigation}/>
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.datetimeView}>
-                    <Text style={styles.datetimeText}>Date & Time</Text>
-                    {!datetimeValid && <Text style={styles.invalid}>  are invalid</Text>}
+    if(entry != null) {
+        return (
+            <View style={styles.container}>
+                <EditEntryHeader entry={entry} navigation={navigation}/>
+                <ScrollView style={styles.scrollView}>
+                    <View style={styles.datetimeView}>
+                        <Text style={styles.datetimeText}>Date & Time</Text>
+                        {!datetimeValid && <Text style={styles.invalid}>  are invalid</Text>}
+                    </View>
+                    <View style={styles.dateView}>
+                        <DateInput date={date} setDate={modifyDate} setIsValid={setDatetimeValid}/>
+                    </View>
+                    <View style={styles.timeView}>
+                        <TimeInput time={time} setTime={modifyTime} setIsValid={setDatetimeValid}/>
+                    </View>
+                    {parameters.map((p, index) => <Detail key={p.id} parameter={p} entry={entry} index={index} setValue={setValue} setIsValid={setIsValid}/>)}
+                </ScrollView>
+                <View style={styles.btnView}>
+                    <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
                 </View>
-                <View style={styles.dateView}>
-                    <DateInput date={date} setDate={modifyDate} setIsValid={setDatetimeValid}/>
-                </View>
-                <View style={styles.timeView}>
-                    <TimeInput time={time} setTime={modifyTime} setIsValid={setDatetimeValid}/>
-                </View>
-                {parameters.map((p, index) => <Detail key={p.id} parameter={p} entry={entry} index={index} setValue={setValue} setIsValid={setIsValid}/>)}
-            </ScrollView>
-            <View style={styles.btnView}>
-                <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
             </View>
-        </View>
-    );
+        );
+    } else return null;
 };
 
 const styles = StyleSheet.create({

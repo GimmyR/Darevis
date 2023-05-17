@@ -35,7 +35,7 @@ const EntryItem = function({ entry, navigation }) {
         <View style={styles.container}>
             <View style={styles.additionDateView}>
                 <Text style={styles.additionDateText}>{entry.addition_date}</Text>
-                <IconButton onPress={() => navigation.push("edit entry", { entry: entry })} name={ "edit" } iconStyle={styles.icon}/>
+                <IconButton onPress={() => navigation.push("edit entry", { entry: entry.id })} name={ "edit" } iconStyle={styles.icon}/>
             </View>
             <View style={styles.tableView}>
                 <Table borderStyle={styles.table}>
