@@ -48,7 +48,7 @@ const EntryItem = function({ entry, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 15
+        marginBottom: 15
     },
 
     additionDateView: {
