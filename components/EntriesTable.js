@@ -1,111 +1,75 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Row, Rows, Table } from "react-native-table-component";
+import Table from "./Table";
+import IconButton from "./IconButton";
 
-const EntriesTable = function({ record }) {
+const EntriesTable = function({ parameters, entries, navigation }) {
     const db = SQLite.openDatabase("darevis");
 
-    const [parameters, setParameters] = useState([]);
+    const [headers, setHeaders] = useState([]);
 
-    const setParams = function(table) {
-        parameters.splice(0, parameters.length);
-        table.forEach(row => parameters.push(row["title"]));
-        parameters.unshift("Date");
-        //parameters.push("");
-        setParameters([...parameters]);
-    };
+    const [rows, setRows] = useState([]);
 
-    const [entries, setEntries] = useState([]);
+    const fillHeaders = function() {
+        headers.splice(0, headers.length);
+        headers.push("Addition Date");
 
-    const setEntry = function(entry, resultSet, resultSet2) {
-        resultSet2.rows._array.forEach(p => {
-            for(var i = 0, e = resultSet.rows._array; i < e.length; i++) {
-                if(p["id"] == e[i]["parameter_id"]) {
-                    entry.push(e[i]["data_value"]);
-                    break;
-                } else if(resultSet2.rows._array.length != e.length) entry.push("");
-            }
-        }); //entry.push(<Button title="Hello ?"/>);
-    };
-
-    const selectDetails = function(tx, row, entry) {
-        tx.executeSql(
-            "SELECT * FROM Entry_Detail WHERE entry_id = ?", [ row["id"] ],
-            (txObj, resultSet) => {
-                tx.executeSql(
-                    "SELECT * FROM Parameter WHERE record_id = ? ORDER BY id ASC", [ record.id ],
-                    (txObj2, resultSet2) => setEntry(entry, resultSet, resultSet2),
-                    (txObj2, error) => console.log(error)
-                );
-            }, (txObj, error) => console.log(error)
-        );
-    };
-
-    const setEntryData = function(tx, table) {
-        entries.splice(0, entries.length);
-        table.forEach(row => {
-            let entry = [ row["addition_date"] ];
-            selectDetails(tx, row, entry);
-            entries.push(entry);
-        }); setTimeout(() => setEntries([...entries]), 200);
-    };
-
-    const selectParameters = function() {
-        db.transaction(tx => {
-            tx.executeSql(
-                "SELECT * FROM Parameter WHERE record_id = ? ORDER BY id ASC",
-                [ record.id ],
-                (txObj, resultSet) => setParams(resultSet.rows._array),
-                (txObj, error) => console.log(error)
-            );
+        parameters.forEach(p => {
+            headers.push(p.title);
+            setHeaders([...headers]);
         });
+
+        headers.push("Edit");
+        setHeaders([...headers]);
     };
 
-    const selectEntries = function() {
-        db.transaction(tx => {
-            tx.executeSql(
-                "SELECT * FROM Entry_Data WHERE record_id = ? ORDER BY id ASC",
-                [ record.id ],
-                (txObj, resultSet) => setEntryData(tx, resultSet.rows._array),
+    const fillRows = function(row, result, entryId) {
+        if(result.length == 1)
+            row.push(result[0]["data_value"]);
+        else row.push("");
+
+        if(row.length == parameters.length + 1) {
+            row.push(<IconButton onPress={() => navigation.push("edit entry", { entry: entryId })} name={ "edit" } iconStyle={styles.icon}/>);
+            rows.push(row);
+            setRows([...rows]);
+        }
+    };
+
+    const selectDetails = function() {
+        rows.splice(0, rows.length);
+        db.transaction(tx => entries.forEach(e => {
+            let row = [ e.addition_date ];
+            parameters.forEach(p => tx.executeSql(
+                "SELECT * FROM Entry_Detail WHERE entry_id = ? AND parameter_id = ?", [e.id, p.id],
+                (txObj, resultSet) => fillRows(row, resultSet.rows._array, e.id),
                 (txObj, error) => console.log(error)
-            );
-        });
+            ));
+        }));
     };
 
-    useEffect(() => {
-        selectParameters();
-        selectEntries();
+    useEffect(() => { 
+        fillHeaders(); 
+        selectDetails();
     }, []);
 
     return (
-        <View>
-            <Table borderStyle={styles.table}>
-                <Row data={parameters} style={styles.headerTable} textStyle={styles.textTable}></Row>
-                <Rows data={entries} textStyle={styles.textTable}></Rows>
-            </Table>
+        <View style={styles.container}>
+            <Table headers={headers} rows={rows} cellWidth={100} borderWidth={1}/>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-
+        marginTop: 30,
+        marginBottom: 30,
+        alignItems: "center"
     },
 
-    table: {
-        borderWidth: 1,
-        borderColor: "black"
-    },
-
-    headerTable: {
-        height: 50,
-        alignContent: "center",
-        backgroundColor: "#abb1ff"
-    },
-
-    textTable: {
-        margin: 10
+    icon: {
+        flex: 1,
+        fontSize: 15
     }
 });
 
