@@ -9,7 +9,7 @@ const HomeHeader = function({ navigation }) {
             </View>
             <View style={styles.buttonsView}>
                 <IconButton onPress={() => navigation.push("new record")} name={ "plus-circle" } iconStyle={styles.circleIcon}/>
-                <IconButton name={ "question-circle" } iconStyle={styles.circleIcon}/>
+                <IconButton onPress={() => navigation.push("about")} name={ "question-circle" } iconStyle={styles.circleIcon}/>
             </View>
         </View>
     );
