@@ -10,6 +10,7 @@ import Record from './screens/Record';
 import NewEntry from './screens/NewEntry';
 import EditRecord from './screens/EditRecord';
 import EditEntry from './screens/EditEntry';
+import About from './screens/About';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,7 @@ const App = function() {
                 <Stack.Screen name='new entry' component={NewEntry}/>
                 <Stack.Screen name='edit record' component={EditRecord}/>
                 <Stack.Screen name='edit entry' component={EditEntry}/>
+                <Stack.Screen name='about' component={About}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
