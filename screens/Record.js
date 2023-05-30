@@ -5,7 +5,10 @@ import * as SQLite from "expo-sqlite";
 import EntryNotFound from "../components/EntryNotFound";
 import { arrayToObject } from "../utils/helpers";
 import EntryItem from "../components/EntryItem";
+import LineChart from "../components/LineChart";
 import ParamChart from "../components/ParamChart";
+import Table from "../components/Table";
+import EntriesTable from "../components/EntriesTable";
 
 const Record = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
@@ -18,7 +21,7 @@ const Record = function({ navigation, route }) {
 
     const selectParameters = function(recordId) {
         db.transaction(tx => tx.executeSql(
-            "SELECT * FROM Parameter WHERE record_id = ?", [recordId],
+            "SELECT * FROM Parameter WHERE record_id = ? ORDER BY id ASC", [recordId],
             (txObj, resultSet) => setParameters(arrayToObject(resultSet.rows._array)),
             (txObj, error) => console.log(error)
         ));
@@ -26,7 +29,7 @@ const Record = function({ navigation, route }) {
 
     const selectEntries = function(recordId) {
         db.transaction(tx => tx.executeSql(
-            "SELECT * FROM Entry_Data WHERE record_id = ?", [ recordId ],
+            "SELECT * FROM Entry_Data WHERE record_id = ? ORDER BY id ASC", [ recordId ],
             (txObj, resultSet) => setEntries(arrayToObject(resultSet.rows._array)),
             (txObj, error) => console.log(error)
         ));
@@ -51,8 +54,8 @@ const Record = function({ navigation, route }) {
                 <RecordHeader record={record} navigation={navigation}/>
                 <ScrollView style={styles.scrollView}>
                     {entries.length == 0 && <EntryNotFound/>}
-                    {entries.length > 0 && parameters.map(p => <ParamChart key={p.id}/>)}
-                    {entries.map(e => <EntryItem key={e.id} entry={e} navigation={navigation}/>)}
+                    {entries.length > 1 && parameters.map(p => <ParamChart key={p.id} parameter={p} entries={entries}/>)}
+                    {entries.length > 0 && <EntriesTable parameters={parameters} entries={entries} navigation={navigation}/>}
                 </ScrollView>
             </View>
         );
@@ -67,8 +70,7 @@ const styles = StyleSheet.create({
     },
 
     scrollView: {
-        paddingHorizontal: 20,
-        paddingVertical: 0
+        paddingHorizontal: 20
     }
 });
 
