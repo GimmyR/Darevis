@@ -38,9 +38,7 @@ const EditEntry = function({ navigation, route }) {
 
     const modifyTime = function(index, value) {
         let hms = time.split(":");
-        var strValue = value + "";
-        if(index != 2)
-            strValue = addZeroBefore(strValue);
+        var strValue = addZeroBefore(value + "");
         hms[index] = strValue;
         setTime(hms[0] + ":" + hms[1] + ":" + hms[2]);
     };
