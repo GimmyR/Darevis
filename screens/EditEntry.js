@@ -47,8 +47,10 @@ const EditEntry = function({ navigation, route }) {
 
     const initValues = function(table, entryId) {
         values.splice(0, values.length);
-        table.forEach(row => values.push({ entry_id: entryId, parameter_id: row.id, data_value: null }));
-        setValues([...values]);
+        table.forEach(row => {
+            values.push({ entry_id: entryId, parameter_id: row.id, data_value: null });
+            setValues([...values]);
+        });
     };
 
     const setValue = function(index, value) {
@@ -73,7 +75,7 @@ const EditEntry = function({ navigation, route }) {
         db.transaction(tx => tx.executeSql(
             "SELECT * FROM Parameter WHERE record_id = ?", [ recordId ],
             (txObj, resultSet) => {
-                initValues(arrayToObject(resultSet.rows._array, entryId));
+                initValues(arrayToObject(resultSet.rows._array), entryId);
                 setParameters(arrayToObject(resultSet.rows._array));
             }, (txObj, error) => console.log(error)
         ));
