@@ -4,18 +4,42 @@ import StdButton from "../components/StdButton";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import Parameter from "../components/Parameter";
-import { arrayToObject } from "../utils/helpers";
+import { addZeroBefore, arrayToObject } from "../utils/helpers";
+import DateInput from "../components/DateInput";
+import TimeInput from "../components/TimeInput";
 
 const NewEntry = function({ navigation, route }) {
     const db = SQLite.openDatabase("darevis");
 
     const [record, setRecord] = useState(null);
 
+    const [date, setDate] = useState(null);
+
+    const [time, setTime] = useState(null);
+
     const [parameters, setParameters] = useState([]);
 
     const [values, setValues] = useState([]);
 
     const [isValid, setIsValid] = useState(true);
+
+    const [datetimeValid, setDatetimeValid] = useState(true);
+
+    const modifyDate = function(index, value) {
+        let dmy = date.split("/");
+        var strValue = value + "";
+        if(index != 2)
+            strValue = addZeroBefore(strValue);
+        dmy[index] = strValue;
+        setDate(dmy[0] + "/" + dmy[1] + "/" + dmy[2]);
+    };
+
+    const modifyTime = function(index, value) {
+        let hms = time.split(":");
+        var strValue = addZeroBefore(value + "");
+        hms[index] = strValue;
+        setTime(hms[0] + ":" + hms[1] + ":" + hms[2]);
+    };
 
     const initValues = function(length) {
         let val = [];
@@ -40,6 +64,9 @@ const NewEntry = function({ navigation, route }) {
         db.transaction(tx => tx.executeSql(
             "SELECT * FROM Record WHERE id = ?", [ route.params.record ],
             (txObj, resultSet) => {
+                let d = new Date();
+                setDate(d.toLocaleDateString());
+                setTime(d.toLocaleTimeString());
                 selectParameters(resultSet.rows._array[0]["id"]);
                 setRecord(arrayToObject(resultSet.rows._array[0]));
             }, (txObj, error) => console.log(error)
@@ -56,10 +83,9 @@ const NewEntry = function({ navigation, route }) {
     };
 
     const onPressYes = function() {
-        let date = new Date();
         let entry = { 
             record_id: record.id, 
-            addition_date:  date.toLocaleDateString() + " " + date.toLocaleTimeString()
+            addition_date:  date + " " + time
         }; saveEntry(entry);
     };
 
@@ -89,6 +115,16 @@ const NewEntry = function({ navigation, route }) {
             <View style={styles.container}>
                 <NewEntryHeader record={record} navigation={navigation}/>
                 <ScrollView style={styles.scrollView}>
+                    <View style={styles.datetimeView}>
+                        <Text style={styles.datetimeText}>Date & Time</Text>
+                        {!datetimeValid && <Text style={styles.invalid}>  are invalid</Text>}
+                    </View>
+                    <View style={styles.dateView}>
+                        <DateInput date={date} setDate={modifyDate} setIsValid={setDatetimeValid}/>
+                    </View>
+                    <View style={styles.timeView}>
+                        <TimeInput time={time} setTime={modifyTime} setIsValid={setDatetimeValid}/>
+                    </View>
                     {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
                 </ScrollView>
                 <View style={styles.btnView}>
@@ -109,6 +145,31 @@ const styles = StyleSheet.create({
     scrollView: {
         paddingHorizontal: 20,
         paddingVertical: 20
+    },
+
+    datetimeView: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 5
+    },
+
+    datetimeText: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#000000"
+    },
+
+    invalid: {
+        color: "red"
+    },
+
+    dateView: {
+        marginBottom: 5
+    },
+
+    timeView: {
+        marginBottom: 10
     },
 
     btnView: {
