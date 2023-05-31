@@ -66,7 +66,7 @@ const App = function() {
 
     return (
         <NavigationContainer>
-            <StatusBar animated={true} hidden={false}/>
+            <StatusBar animated={true} hidden={false} backgroundColor="#000000"/>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='home' component={Home}/>
                 <Stack.Screen name='new record' component={NewRecord}/>
