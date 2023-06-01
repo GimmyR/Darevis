@@ -125,7 +125,9 @@ const NewEntry = function({ navigation, route }) {
                     <View style={styles.timeView}>
                         <TimeInput time={time} setTime={modifyTime} setIsValid={setDatetimeValid}/>
                     </View>
-                    {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
+                    <View style={styles.parametersView}>
+                        {parameters.map((p, index) => <Parameter key={p.id} parameter={p} values={values} index={index} setValues={setValues} setIsValid={setIsValid}/>)}
+                    </View>
                 </ScrollView>
                 <View style={styles.btnView}>
                     <StdButton onPress={() => onPressSaveEntry()} btnStyle={styles.btnStyle} txtStyle={styles.txtStyle} underlayColor={"#d1d14d"}>Save Entry</StdButton>
@@ -170,6 +172,10 @@ const styles = StyleSheet.create({
 
     timeView: {
         marginBottom: 10
+    },
+
+    parametersView: { 
+        marginBottom: 25 
     },
 
     btnView: {
