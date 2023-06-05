@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 const Parameter = function({ parameter, values, index, setValues, setIsValid }) {
@@ -13,12 +13,19 @@ const Parameter = function({ parameter, values, index, setValues, setIsValid }) 
         var nb = parseFloat(value);
         if(value == "" || (parameter.min <= nb && nb <= parameter.max)) {
             let val = values;
-            val[index].parameter_id = parameter.id;
             val[index].data_value = value;
             setValues(val);
             validate(true);
         } else validate(false);
     };
+
+    const initParam = function() {
+        let val = values;
+        val[index].parameter_id = parameter.id;
+        setValues(val);
+    };
+
+    useEffect(() => initParam(), []);
 
     return (
         <View style={styles.container}>

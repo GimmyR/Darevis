@@ -13,8 +13,10 @@ const ParamChart = function({ parameter, entries }) {
         db.transaction(tx => entries.forEach(e => tx.executeSql(
             "SELECT * FROM Entry_Detail WHERE entry_id = ? AND parameter_id = ?", [e.id, parameter.id],
             (txObj, resultSet) => {
-                data.push({ x: e.addition_date, y: resultSet.rows._array[0]["data_value"] });
-                setData([...data]);
+                if(resultSet.rows._array.length == 1) {
+                    data.push({ x: e.addition_date, y: resultSet.rows._array[0]["data_value"] });
+                    setData([...data]);
+                }
             }, (txObj, error) => console.log(error)
         )));
     };

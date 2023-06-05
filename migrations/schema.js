@@ -27,7 +27,7 @@ export const schema = [
         id              INTEGER PRIMARY KEY,
         entry_id        INTEGER NOT NULL,
         parameter_id    INTEGER NOT NULL,
-        data_value      REAL NOT NULL,
+        data_value      REAL,
         FOREIGN KEY (entry_id) REFERENCES Entry_Data(id) ON DELETE CASCADE,
         FOREIGN KEY (parameter_id) REFERENCES Parameter(id) ON DELETE CASCADE
     );`
