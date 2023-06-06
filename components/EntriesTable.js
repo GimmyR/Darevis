@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
 import Table from "./Table";
@@ -55,7 +55,10 @@ const EntriesTable = function({ parameters, entries, navigation }) {
 
     return (
         <View style={styles.container}>
-            <Table headers={headers} rows={rows} cellWidth={100} borderWidth={1}/>
+            {
+                rows.length > 0 ? <Table headers={headers} rows={rows} cellWidth={100} borderWidth={1}/>
+                                : <ActivityIndicator size="large" color="#686868"/>
+            }
         </View>
     );
 };
