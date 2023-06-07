@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import AboutHeader from "../components/AboutHeader";
 
 const About = function({ navigation }) {
+    const logo = require("./../assets/logo.png");
+    
     return (
         <View style={styles.container}>
             <AboutHeader navigation={navigation}/>
@@ -11,7 +13,7 @@ const About = function({ navigation }) {
                     <Text style={styles.desc}>Visualization</Text>
                 </View>
                 <View style={styles.logoView}>
-
+                    <Image source={logo} style={styles.logo}/>
                 </View>
                 <View style={styles.developedByView}>
                     <Text style={styles.developedBy}>Developed by</Text>
@@ -52,9 +54,12 @@ const styles = StyleSheet.create({
     },
 
     logoView: {
+        
+    },
+
+    logo: {
         width: 150,
-        height: 150,
-        backgroundColor: "#efefef"
+        height: 150
     },
 
     developedByView: {
