@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 30,
-        color: "blue"
+        color: "#00ffff"
     },
 
     buttonsView: {
